@@ -25,6 +25,12 @@ export class ClubEntity extends TimestampEntites {
   field: string;
 
   @Column()
+  path: string;
+
+  @Column()
+  university: string;
+
+  @Column()
   creationDate : Date ;
 
   @Column({ default: 'club' })

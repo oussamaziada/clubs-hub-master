@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsDate, IsString } from "class-validator";
+import { IsDate, IsNumber, IsString } from "class-validator";
 import moment from 'moment';
 
 export class CreateEventDto {
@@ -12,6 +12,9 @@ export class CreateEventDto {
 
     @IsString()
     place: string;
+
+    @IsNumber()
+    places: number;
 
     @IsDate()
    // @Transform(({ value }) => moment(value, 'DD/MM/YYYY').toDate())

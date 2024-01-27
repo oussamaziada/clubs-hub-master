@@ -14,4 +14,8 @@ export class UpdateClubDto extends PartialType(CreateClubDto) {
     @IsOptional()
     @IsDate()
     date: Date;
+
+    @IsOptional()
+    @IsString()
+    path : string;
 }

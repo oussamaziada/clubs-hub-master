@@ -8,6 +8,12 @@ export class CreateClubDto {
     @IsString()
     field : string ;
 
+    @IsString()
+    path : string ;
+
+    @IsString()
+    university : string ;
+
     @IsDate()
     creationDate: Date;
 
