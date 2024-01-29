@@ -7,6 +7,7 @@ export class CreatePostDto {
     @IsNotEmpty()
     text : string ;
 
+
     /* @IsNotEmpty()
     @IsString()
     userId: string; */

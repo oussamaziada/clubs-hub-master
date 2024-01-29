@@ -8,7 +8,7 @@ export class CreateEventDto {
     name : string ;
 
     @IsString()
-    descriptioin : string ;
+    description : string ;
 
     @IsString()
     place: string;
