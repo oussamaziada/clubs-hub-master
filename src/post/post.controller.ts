@@ -45,9 +45,9 @@ export class PostController {
   }
 
   @Post(':id/like')
-  async addLike(@Param('id') postId: number) {
+  async addLike(@Param('id') postId: number, @User() user){
     try {
-      const likedPost = await this.postService.addLike(postId);
+      const likedPost = await this.postService.toggleLike(postId,user);
       return `Like added to post with ID ${likedPost.id}. Total likes: ${likedPost.likes}`;
     } catch (error) {
       if (error instanceof NotFoundException) {

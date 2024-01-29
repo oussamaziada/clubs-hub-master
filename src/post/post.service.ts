@@ -5,6 +5,7 @@ import { PostEntity } from './entities/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClubService } from 'src/club/club.service';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class PostService {
@@ -75,20 +76,39 @@ export class PostService {
     return await this.postRepository.delete(id);
   }
 
+   areUsersEqual(user1: UserEntity, user2: UserEntity): boolean {
+    return user1.id === user2.id;
+  }
 
-  async addLike(postId : number): Promise<PostEntity> {
-    const post = await this.postRepository.findOneBy({id : postId }) ;
 
+  async toggleLike(postId: number, user): Promise<PostEntity> {
+    const post = await this.postRepository.findOneBy({id: postId});
+  
     if (!post) {
       throw new NotFoundException(`Post with ID ${postId} not found`);
     }
-
-    // Increment the likes count
-    post.likes += 1;
-
+  
+    // Check if the user has already liked the post
+    const index = post.likedBy.findIndex(u => this.areUsersEqual(u, user));    
+    console.log(user);
+    console.log(post.likedBy);
+    console.log(index);
+  
+    if (index === -1) {
+      // The user hasn't liked the post yet, so add their like
+      post.likes += 1;
+      post.likedBy.push(user);
+      
+    } else {
+      // The user has already liked the post, so remove their like
+      post.likes -= 1;
+      post.likedBy.splice(index, 1);
+      
+    }
+  
     // Save the updated post to the database
     await this.postRepository.save(post);
-
+  
     return post;
   }
 }
