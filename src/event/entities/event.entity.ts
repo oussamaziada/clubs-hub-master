@@ -40,8 +40,6 @@ export class EventEntity extends TimestampEntites {
   @JoinTable()
   participants: UserEntity[];
 
-  @ManyToOne(
-    type => ClubEntity,
-    (club) => club.events )
+  @ManyToOne(type => ClubEntity,club => club.events, {eager : true ,cascade: ['insert', 'update'],nullable: true})
   organizer : ClubEntity ;
 }
