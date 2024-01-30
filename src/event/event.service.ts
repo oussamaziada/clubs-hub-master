@@ -96,11 +96,15 @@ export class EventService {
     if (event.participants.find(participant => participant.id === user.id)) {
       throw new ConflictException(`You already participate to this event`);
     }
+    if (user.role === 'admin' || user.role === 'club') {
+      throw new ConflictException(`You can't participate to this event`);
+    }
     if (event.participants.length >= event.places) {
       throw new ConflictException(`No more places available`);
     }
     // Add the user to the club's members
     event.participants.push(user);
+    event.places = event.places - 1;
   
     // Save the updated club
     await this.eventRepository.save(event); 

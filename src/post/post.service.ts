@@ -90,10 +90,6 @@ export class PostService {
   
     // Check if the user has already liked the post
     const index = post.likedBy.findIndex(u => this.areUsersEqual(u, user));    
-    console.log(user);
-    console.log(post.likedBy);
-    console.log(index);
-  
     if (index === -1) {
       // The user hasn't liked the post yet, so add their like
       post.likes += 1;
