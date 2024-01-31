@@ -28,6 +28,12 @@ export class PostController {
   findByClubId(@Param('id') id: string) {
     return this.postService.findByClubId(+id);
   }
+
+  @Get('lastEvents')
+  findLastEvents() {
+    return this.postService.findLastPosts();
+  }
+
 /* 
   @Get('myposts')
   async findMyPosts(@User() user): Promise<PostEntity[]> {

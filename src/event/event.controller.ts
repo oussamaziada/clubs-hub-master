@@ -23,7 +23,7 @@ export class EventController {
 
   @Get('lastEvents')
   findLastEvents() {
-    return this.eventService.findLastFiveEvents();
+    return this.eventService.findLastEvents();
   }
 
   

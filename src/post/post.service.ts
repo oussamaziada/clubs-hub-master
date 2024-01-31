@@ -107,4 +107,13 @@ export class PostService {
   
     return post;
   }
+
+  findLastPosts() {
+    return this.postRepository.find({
+      order: {
+        id: 'DESC', // assuming that the id is auto-incremented
+      },
+      take: 3,
+    });
+  }
 }

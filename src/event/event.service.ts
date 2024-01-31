@@ -81,12 +81,12 @@ export class EventService {
     //  throw new UnauthorizedException('');
   }
 
-  findLastFiveEvents() {
+  findLastEvents() {
     return this.eventRepository.find({
       order: {
         id: 'DESC', // assuming that the id is auto-incremented
       },
-      take: 5,
+      take: 3,
     });
   }
 
