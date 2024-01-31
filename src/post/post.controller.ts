@@ -8,7 +8,13 @@ import { PostEntity } from './entities/post.entity';
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
+  
+  @Get('lastPosts')
+  findLastPosts() {
+    return this.postService.findLastPosts();
+  }
 
+  
   @Post()
   create(@Body() createPostDto: CreatePostDto, @User() user) {
     return this.postService.create(createPostDto, user);
@@ -29,11 +35,7 @@ export class PostController {
     return this.postService.findByClubId(+id);
   }
 
-  @Get('lastPosts')
-  findLastPosts() {
-    return this.postService.findLastPosts();
-  }
-
+  
 /* 
   @Get('myposts')
   async findMyPosts(@User() user): Promise<PostEntity[]> {

@@ -108,12 +108,17 @@ export class PostService {
     return post;
   }
 
-  findLastPosts() {
-    return this.postRepository.find({
-      order: {
-        id: 'DESC', // assuming that the id is auto-incremented
-      },
-      take: 3,
-    });
-  }
+      async findLastPosts() {
+      /*let posts: PostEntity[] = [];
+      posts = await this.postRepository.find();
+      let lastPosts = posts.slice(-3);
+      return lastPosts;*/
+       return this.postRepository.find({
+        order: {
+          id: 'DESC', // assuming that the id is auto-incremented
+        },
+        take: 3,
+      }); 
+    }
+
 }
