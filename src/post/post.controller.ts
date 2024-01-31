@@ -29,8 +29,8 @@ export class PostController {
     return this.postService.findByClubId(+id);
   }
 
-  @Get('lastEvents')
-  findLastEvents() {
+  @Get('lastPosts')
+  findLastPosts() {
     return this.postService.findLastPosts();
   }
 
