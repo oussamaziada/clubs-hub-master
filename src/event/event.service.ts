@@ -86,7 +86,7 @@ export class EventService {
       order: {
         id: 'DESC', // assuming that the id is auto-incremented
       },
-      take: 3,
+      take: 5,
     });
   }
 
