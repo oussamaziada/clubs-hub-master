@@ -59,4 +59,9 @@ export class EventController {
   addParticipant(@Param('id') id: string, @User() user) {
     return this.eventService.Participate(+id, user);
   }
+
+  @Delete('UnParticipate/:eventId/:userId')
+  removeParticipant(@Param('eventId') eventId: string, @Param('userId') userId: string, @User() club){
+    return this.eventService.RemoveParticipant(+eventId, +userId,club);
+  }
 }

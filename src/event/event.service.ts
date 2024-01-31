@@ -4,6 +4,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventEntity } from './entities/event.entity';
 import { Repository } from 'typeorm';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class EventService {
@@ -11,6 +12,8 @@ export class EventService {
   constructor(
     @InjectRepository(EventEntity)
     private eventRepository: Repository<EventEntity>,
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>,
   ) {}
 
 
@@ -102,11 +105,37 @@ export class EventService {
     if (event.participants.length >= event.places) {
       throw new ConflictException(`No more places available`);
     }
-    // Add the user to the club's members
+    // Add the user to the event's participants
     event.participants.push(user);
     event.places = event.places - 1;
   
     // Save the updated club
     await this.eventRepository.save(event); 
   }
+
+  async RemoveParticipant (eventId: number, userId: number, club) {
+    const event =await this.eventRepository.findOne({ where: { id: eventId } });
+    const user =await this.usersRepository.findOne({ where: { id: userId } });
+    if((! (club.role === 'club')) || (! ( event.organizer.id === club.id))){
+      console.log(club);
+      //console.log(event.organizer.id);
+      //console.log(club.id);
+      throw new ConflictException(`You can't remove participant to this event`);
+    }
+    if (!event) {
+      throw new NotFoundException(`Event with ID ${eventId} not found`);
+    }
+    if (!event.participants.find(participant => participant.id === userId)) {
+      throw new ConflictException(`This user is not a participant to this event`);
+    }
+    const index = event.participants.findIndex(participant => participant.id === user.id);
+    console.log("index : "+index);
+    if (index > -1) {
+      event.participants.splice(index, 1);
+      event.places = event.places + 1;
+      await this.eventRepository.save(event); 
+    } 
+  }
+    
+
 }
