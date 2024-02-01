@@ -167,6 +167,10 @@ export class ClubService {
   
     // Add the user to the club's members
     club.members.push(user as unknown as UserEntity);
+
+    if (club.members.find(member => member.id === user.id)) {
+      throw new ConflictException(`User already member of this club`);
+    }
   
     // Save the updated club
     await this.clubRepository.save(club);
@@ -194,6 +198,7 @@ export class ClubService {
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
+    console.log(club.members);
   
     // Remove the user from the club's members
     club.members = club.members.filter(member => member.id !== user.id);
