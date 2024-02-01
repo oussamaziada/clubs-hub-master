@@ -24,7 +24,7 @@ export class ClubEntity extends TimestampEntites {
   @Column()
   field: string;
 
-  @Column()
+  @Column({default : 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'})
   path: string;
 
   @Column()
@@ -33,7 +33,7 @@ export class ClubEntity extends TimestampEntites {
   @Column()
   creationDate : Date ;
 
-  @Column({ default: 'club' })
+  @Column({ default: 'assets/clubs/logo.jpg' })
   role : string ;
  
   @ManyToMany(type => UserEntity, user => user.clubs, {nullable : true,eager : true ,cascade: ['insert', 'update']})
