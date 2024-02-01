@@ -187,4 +187,19 @@ export class ClubService {
 
   }
 
+  async removeMember(userId: number, club) {
+    // Find the user by its ID
+    const user = await this.usersRepository.findOne({ where :{id:userId}});
+  
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+  
+    // Remove the user from the club's members
+    club.members = club.members.filter(member => member.id !== user.id);
+  
+    // Save the updated club
+    await this.clubRepository.save(club);
+  }
+
 }

@@ -65,4 +65,9 @@ export class ClubController {
   addMemberById(@Param('memberId') memberId: string, @User() club) {
     return this.clubService.addMemberById(+memberId, club);
   }
+
+  @Delete('removeMember/:memberId')
+  removeMember(@Param('memberId') memberId: string, @User() club){
+    return this.clubService.removeMember(+memberId, club);
+  }
 }
