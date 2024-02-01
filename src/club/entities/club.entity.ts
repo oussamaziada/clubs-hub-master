@@ -33,7 +33,7 @@ export class ClubEntity extends TimestampEntites {
   @Column()
   creationDate : Date ;
 
-  @Column( )
+  @Column( {default : 'club'})
   role : string ;
  
   @ManyToMany(type => UserEntity, user => user.clubs, {nullable : true,eager : true ,cascade: ['insert', 'update']})
