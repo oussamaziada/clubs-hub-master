@@ -149,6 +149,10 @@ export class ClubService {
     if (!club) {
       throw new NotFoundException(`Club with ID ${clubId} not found`);
     }
+
+    if (club.members.find(member => member.id === user.id)) {
+      throw new ConflictException(`User already member of this club`);
+    }
   
     // Add the user to the club's members
     club.members.push(user);
