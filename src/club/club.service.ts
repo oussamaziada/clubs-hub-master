@@ -22,9 +22,7 @@ export class ClubService {
     private jwtService: JwtService, 
   ) {}
 
-  /* create(createClubDto: CreateClubDto) {
-    return this.clubRepository.save(createClubDto);
-  } */
+  
 
   async create(clubData: CreateClubDto): Promise<Partial<ClubEntity>> {
     const club = this.clubRepository.create({
@@ -50,21 +48,15 @@ export class ClubService {
 
     async login(credentials: LoginCredentialDto)  {
 
-      // Récupére le login et le mot de passe
        const {username, password} = credentials;
-      // On peut se logger ou via le username ou le password
-      // Vérifier est ce qu'il y a un club avec ce login ou ce mdp
       const club = await this.clubRepository.createQueryBuilder("club")
         .where("club.username = :username" ,
           {username}
           )
         .getOne();
-      // console.log(club);
-      // Si not club je déclenche une erreur
   
       if (!club)
         throw new NotFoundException('username ou password erronée');
-      // Si oui je vérifie est ce que le mot est correct ou pas
       const hashedPassword = await bcrypt.hash(password, club.salt);
       if (hashedPassword === club.password) {
         const payload = {
@@ -79,7 +71,6 @@ export class ClubService {
           "access_token" : jwt
         };
       } else {
-        // Si mot de passe incorrect je déclenche une erreur
         throw new NotFoundException('username ou password erronée');
       }
     } 
@@ -103,7 +94,6 @@ export class ClubService {
       id,
       ...updateClubDto
     });
-    // tester le cas ou l'utilisateur d'id id n'existe pas
     if(! clubToUpdate) {
         throw new NotFoundException(`Le club d'id ${id} n'existe pas`);
     }
@@ -154,29 +144,24 @@ export class ClubService {
       throw new ConflictException(`User already member of this club`);
     }
   
-    // Add the user to the club's members
     club.members.push(user);
   
-    // Save the updated club
     await this.clubRepository.save(club); 
   }
 
   async addMemberById(userId: number,club): Promise<void> {
-    // Find the user by its ID
     const user = await this.usersRepository.findOne({ where :{id:userId}});
   
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
   
-    // Add the user to the club's members
     club.members.push(user as unknown as UserEntity);
 
     if (club.members.find(member => member.id === user.id)) {
       throw new ConflictException(`User already member of this club`);
     }
   
-    // Save the updated club
     await this.clubRepository.save(club);
   }
 
@@ -196,7 +181,6 @@ export class ClubService {
   }
 
   async removeMember(userId: number, club) {
-    // Find the user by its ID
     const user = await this.usersRepository.findOne({ where :{id:userId}});
   
     if (!user) {
@@ -204,10 +188,8 @@ export class ClubService {
     }
     console.log(club.members);
   
-    // Remove the user from the club's members
     club.members = club.members.filter(member => member.id !== user.id);
   
-    // Save the updated club
     await this.clubRepository.save(club);
   }
 

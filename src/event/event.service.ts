@@ -63,10 +63,7 @@ export class EventService {
     if (!event) {
       throw new NotFoundException('');
     }
-   // if (this.userService.isOwnerOrAdmin(cv, user))
       return this.eventRepository.softDelete(id);
-   // else
-    //  throw new UnauthorizedException('');
   }
 
   async restoreEvent(id: number, /* user */) {
@@ -75,10 +72,7 @@ export class EventService {
     if (!event) {
       throw new NotFoundException('event not found');
     }
-   // if (this.userService.isOwnerOrAdmin(cv, user))
       return this.eventRepository.restore(id);
-   // else
-    //  throw new UnauthorizedException('');
   }
 
   findLastEvents() {
@@ -105,11 +99,9 @@ export class EventService {
     if (event.participants.length >= event.places) {
       throw new ConflictException(`No more places available`);
     }
-    // Add the user to the event's participants
     event.participants.push(user);
     event.places = event.places - 1;
   
-    // Save the updated club
     await this.eventRepository.save(event); 
   }
 
@@ -118,8 +110,6 @@ export class EventService {
     const user =await this.usersRepository.findOne({ where: { id: userId } });
     if((! (club.role === 'club')) || (! ( event.organizer.id === club.id))){
       console.log(club);
-      //console.log(event.organizer.id);
-      //console.log(club.id);
       throw new ConflictException(`You can't remove participant to this event`);
     }
     if (!event) {

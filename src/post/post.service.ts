@@ -88,21 +88,17 @@ export class PostService {
       throw new NotFoundException(`Post with ID ${postId} not found`);
     }
   
-    // Check if the user has already liked the post
     const index = post.likedBy.findIndex(u => this.areUsersEqual(u, user));    
     if (index === -1) {
-      // The user hasn't liked the post yet, so add their like
       post.likes += 1;
       post.likedBy.push(user);
       
     } else {
-      // The user has already liked the post, so remove their like
       post.likes -= 1;
       post.likedBy.splice(index, 1);
       
     }
   
-    // Save the updated post to the database
     await this.postRepository.save(post);
   
     return post;
@@ -115,7 +111,7 @@ export class PostService {
       return lastPosts;*/
        return this.postRepository.find({
         order: {
-          id: 'DESC', // assuming that the id is auto-incremented
+          id: 'DESC', 
         },
         take: 3,
       }); 

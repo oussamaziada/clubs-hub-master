@@ -53,26 +53,15 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
 
-  /* async update(id: number, updateUserDto: UpdateUserDto) {
-    const userToUpdate = await this.usersRepository.findOneBy({ id });
-    if (!userToUpdate) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    userToUpdate.firstName = updateUserDto.firstName ?? userToUpdate.firstName;
-    userToUpdate.lastName = updateUserDto.lastName ?? userToUpdate.lastName;
-    await this.usersRepository.save(userToUpdate);
-    return userToUpdate; 
-  } */
+ 
   async update(id: number, updateUserDto: UpdateUserDto) {
   const userToUpdate = await this.usersRepository.preload({
     id,
     ...updateUserDto
   });
-  // tester le cas ou l'utilisateur d'id id n'existe pas
   if(! userToUpdate) {
     throw new NotFoundException(`L'utilisateur d'id ${id} n'existe pas`);
   }
-  //sauvgarder l'utilisateur apres modification'
   return await this.usersRepository.save(userToUpdate);
 
   }
@@ -80,21 +69,15 @@ export class UsersService {
 
    async login(credentials: LoginCredentialDto)  {
 
-    // Récupére le login et le mot de passe
      const {username, password} = credentials;
-    // On peut se logger ou via le username ou le password
-    // Vérifier est ce qu'il y a un user avec ce login ou ce mdp
     const user = await this.usersRepository.createQueryBuilder("user")
       .where("user.username = :username" ,
         {username}
         )
       .getOne();
-    // console.log(user);
-    // Si not user je déclenche une erreur
 
     if (!user)
       throw new NotFoundException('username ou password erronée');
-    // Si oui je vérifie est ce que le mot est correct ou pas
     const hashedPassword = await bcrypt.hash(password, user.salt);
     if (hashedPassword === user.password) {
       const payload = {
@@ -108,7 +91,6 @@ export class UsersService {
         "access_token" : jwt
       };
     } else {
-      // Si mot de passe incorrect je déclenche une erreur
       throw new NotFoundException('username ou password erronée');
     }
   } 
